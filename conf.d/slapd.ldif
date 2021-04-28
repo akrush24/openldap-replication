@@ -1,0 +1,73 @@
+dn: cn=config
+objectClass: olcGlobal
+cn: config
+olcPidFile: /run/openldap/slapd.pid
+olcArgsFile: /run/openldap/slapd.args
+olcThreads: 128
+olcServerID: 1 ldap://ldap01.srv.local:389
+olcServerID: 2 ldap://ldap02.srv.local:389
+olcServerID: 3 ldap://ldap03.srv.local:389
+
+dn: cn=module,cn=config
+objectClass: olcModuleList
+cn: module
+olcModulepath:  /usr/lib/openldap
+olcModuleload:  back_mdb.so
+olcModuleload:  syncprov.so
+
+dn: cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: schema
+
+include: file:///etc/openldap/schema/core.ldif
+include: file:///etc/openldap/schema/cosine.ldif
+include: file:///etc/openldap/schema/inetorgperson.ldif
+include: file:///etc/openldap/schema/nis.ldif
+
+dn: olcDatabase={0}config,cn=config
+objectClass: olcDatabaseConfig
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" manage  by * none
+olcAddContentAcl: TRUE
+olcLastMod: TRUE
+olcMaxDerefDepth: 15
+olcReadOnly: FALSE
+olcRootDN: cn=config
+olcSyncUseSubentry: FALSE
+olcMonitoring: FALSE
+olcRootPW: 123
+olcSyncRepl:
+  rid=001
+  provider=ldap://ldap01.srv.local:389
+  binddn=cn=config
+  bindmethod=simple
+  credentials=123
+  searchbase=cn=config
+  type=refreshAndPersist
+  retry="5 5 300 5"
+  timeout=1
+olcSyncRepl:
+  rid=002
+  provider=ldap://ldap02.srv.local:389
+  binddn=cn=config
+  bindmethod=simple
+  credentials=123
+  searchbase=cn=config
+  type=refreshAndPersist
+  retry="5 5 300 5"
+  timeout=1
+olcSyncRepl:
+  rid=003
+  provider=ldap://ldap03.srv.local:389
+  binddn=cn=config
+  bindmethod=simple
+  credentials=123
+  searchbase=cn=config
+  type=refreshAndPersist
+  retry="5 5 300 5"
+  timeout=1
+olcMirrorMode: TRUE
+
+dn: olcOverlay=syncprov,olcDatabase={0}config,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
