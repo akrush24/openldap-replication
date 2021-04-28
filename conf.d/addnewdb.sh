@@ -28,6 +28,7 @@ olcRootDN: cn=admin,${SUFFIX}
 olcRootPW: 123
 olcDbDirectory: ${DBDIR}
 olcDbIndex: objectClass eq
+olcDbIndex: entryUUID eq
 olcSyncRepl:
   rid=${RID1}
   provider=${PROVIDER1}
@@ -93,4 +94,5 @@ userPassword: 01010101
 description: Simple User
 EOF!
 
+  sleep 0.2
 done
