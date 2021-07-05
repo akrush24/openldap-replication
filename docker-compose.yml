@@ -16,38 +16,6 @@ services:
     networks:
       - ldap_net
     entrypoint: ["/entrypoint.sh"]
-  ldap02:
-    container_name: ldap02
-    hostname: ldap02.srv.local
-    build: .
-    restart: always
-    ports:
-      - "3892:389"
-    expose:
-      - 3892
-    volumes:
-      - ./02/data:/var/lib/openldap/openldap-data
-      - ./02/slapd.d:/etc/openldap/slapd.d
-      - ./conf.d:/etc/openldap/conf.d
-    networks:
-      - ldap_net
-    entrypoint: ["/entrypoint.sh"]
-  ldap03:
-    container_name: ldap03
-    hostname: ldap03.srv.local
-    build: .
-    restart: always
-    ports:
-      - "3893:389"
-    expose:
-      - 3893
-    volumes:
-      - ./03/data:/var/lib/openldap/openldap-data
-      - ./03/slapd.d:/etc/openldap/slapd.d
-      - ./conf.d:/etc/openldap/conf.d
-    networks:
-      - ldap_net
-    entrypoint: ["/entrypoint.sh"]
 networks:
   ldap_net:
     driver: bridge

@@ -1,11 +1,9 @@
 #!/bin/sh
 
 PROVIDER1=ldap://ldap01.srv.local:389
-PROVIDER2=ldap://ldap02.srv.local:389
-PROVIDER3=ldap://ldap03.srv.local:389
 RID=1
 
-DB_COUNT="${1:-333}"
+DB_COUNT="${1:1}"
 
 for ID in $(seq 1 ${DB_COUNT}); do
   RID1="$(printf %03d ${RID})"
@@ -29,42 +27,6 @@ olcRootPW: 123
 olcDbDirectory: ${DBDIR}
 olcDbIndex: objectClass eq
 olcDbIndex: entryUUID eq
-olcSyncRepl:
-  rid=${RID1}
-  provider=${PROVIDER1}
-  binddn=cn=admin,${SUFFIX}
-  bindmethod=simple
-  credentials=123
-  searchbase=${SUFFIX}
-  type=refreshAndPersist
-  retry="5 5 300 5"
-  timeout=1
-olcSyncRepl:
-  rid=${RID2}
-  provider=${PROVIDER2}
-  binddn=cn=admin,${SUFFIX}
-  bindmethod=simple
-  credentials=123
-  searchbase=${SUFFIX}
-  type=refreshAndPersist
-  retry="5 5 300 5"
-  timeout=1
-olcSyncRepl:
-  rid=${RID3}
-  provider=${PROVIDER3}
-  binddn=cn=admin,${SUFFIX}
-  bindmethod=simple
-  credentials=123
-  searchbase=${SUFFIX}
-  type=refreshAndPersist
-  retry="5 5 300 5"
-  timeout=1
-olcMirrorMode: TRUE
-
-dn: olcOverlay=syncprov,olcDatabase={${ID}}mdb,cn=config
-objectClass: olcOverlayConfig
-objectClass: olcSyncProvConfig
-olcOverlay: syncprov
 EOF!
 
   ldapadd -H ldapi://%2Fvar%2Frun%2Fopenldap%2Fldapi -x -D "cn=admin,${SUFFIX}" -w 123 <<EOF!
